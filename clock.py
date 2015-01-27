@@ -68,7 +68,7 @@ def chime(n, h):
         if n == 4:
             if h > 12:
                 hour(h-12)
-            else
+            else:
                 hour(h)
 
 # This finds the next quarter-hour
