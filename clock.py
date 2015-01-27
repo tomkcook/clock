@@ -87,6 +87,5 @@ while True:
     while datetime.today() < cTime:
         tm.delay(1000)
         delta = cTime - datetime.today()
-        print 'Waiting {0} seconds'.format(delta.seconds)
     chime(n, h)
     
