@@ -31,7 +31,7 @@ quarters = [
 def round():
     for i in range(8):
         sounds[i].play()
-        tm.delay(250)
+        tm.wait(250)
 
 # Decide whether chimes should sound based on hour of day.
 def quietTimes(h):
@@ -43,9 +43,9 @@ def quietTimes(h):
 def part(slice):
     for i in range(3):
         sounds[slice[i]-1].play()
-        tm.delay(clock_period)
+        tm.wait(clock_period)
     sounds[slice[3]-1].play()
-    tm.delay(clock_period*3)
+    tm.wait(clock_period*3)
 
 # Chime the given quarter (1, 2, 3 or 4)
 def quarter(n):
@@ -59,7 +59,7 @@ def quarter(n):
 def hour(n):
     for i in range(n):
         sounds[7].play()
-        tm.delay(3000)
+        tm.wait(3000)
 
 # Chime the quarters and hour as appropriate
 def chime(n, h):
@@ -85,7 +85,7 @@ while True:
         n = 4
     h = cTime.hour
     while datetime.today() < cTime:
-        tm.delay(1000)
+        tm.wait(1000)
         delta = cTime - datetime.today()
     chime(n, h)
     
