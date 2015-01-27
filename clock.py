@@ -80,7 +80,9 @@ def nextChimeTime():
 
 while True:
     cTime = nextChimeTime()
-    n = int(math.floor(cTime.minute/15))+1
+    n = int(math.floor(cTime.minute/15))
+    if n == 0:
+        n = 4
     h = cTime.hour
     while datetime.today() < cTime:
         tm.delay(1000)
