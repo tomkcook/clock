@@ -77,10 +77,10 @@ def nextChimeTime():
     nsecs = dt.minute*60 + dt.second + dt.microsecond*1e-6
     delta = (nsecs//900)*900+900-nsecs
     return dt + timedelta(seconds = delta)
-    
+
 while True:
     cTime = nextChimeTime()
-    n = int(math.floor(cTime.minute/15))
+    n = int(math.floor(cTime.minute/15))+1
     h = cTime.hour
     while datetime.today() < cTime:
         tm.delay(1000)
