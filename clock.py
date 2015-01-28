@@ -18,7 +18,7 @@ mx.init(44100, -16, 2, 2048)
 sounds = [mx.Sound('./data/bell-{0}.wav'.format(i)) for i in range(1,9)]
 
 # Set this for the pace you want the quarters chimed at
-clock_period = 500
+clock_period = 700
 # Cambridge quarters
 quarters = [
     [2, 3, 4, 7],
@@ -65,6 +65,7 @@ def hour(n):
 def chime(n, h):
     if quietTimes(h):
         quarter(n)
+        tm.wait(1500)
         if n == 4:
             if h > 12:
                 hour(h-12)
