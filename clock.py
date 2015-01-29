@@ -18,6 +18,8 @@ mx.init(44100, -16, 2, 2048)
 
 sounds = [mx.Sound('./data/bell-{0}.wav'.format(i)) for i in range(1,9)]
 stedman = ringing.stedman()
+ringing_vol = 0.25
+
 # Set this for the pace you want the quarters chimed at
 clock_period = 700
 # Cambridge quarters
@@ -94,8 +96,8 @@ while True:
         tm.wait(1000)
         delta = cTime - datetime.today()
     chime(n, h)
-    if h == 16:
-        setVolume(0.5)
+    if h == 16 and n == 4:
+        setVolume(ringing_vol)
         tm.wait(60000)
         ringing.play_method(stedman, sounds)
         setVolume(1.0)
