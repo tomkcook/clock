@@ -94,7 +94,7 @@ while True:
         tm.wait(1000)
         delta = cTime - datetime.today()
     chime(n, h)
-    if h == 15:
+    if h == 16:
         setVolume(0.5)
         tm.wait(60000)
         ringing.play_method(stedman, sounds)
