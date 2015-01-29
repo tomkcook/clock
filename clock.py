@@ -11,12 +11,13 @@ import pygame.mixer as mx
 import pygame.time as tm
 from datetime import datetime, time, timedelta
 import math
+import ringing
 
 # Setting the buffer size to 2048 greatly improves the striking.  Not clear why.
 mx.init(44100, -16, 2, 2048)
 
 sounds = [mx.Sound('./data/bell-{0}.wav'.format(i)) for i in range(1,9)]
-
+stedman = ringing.stedman()
 # Set this for the pace you want the quarters chimed at
 clock_period = 700
 # Cambridge quarters
@@ -79,6 +80,10 @@ def nextChimeTime():
     delta = (nsecs//900)*900+900-nsecs
     return dt + timedelta(seconds = delta)
 
+def setVolume(vol):
+    for s in sounds:
+        s.set_volume(vol)
+    
 while True:
     cTime = nextChimeTime()
     n = int(math.floor(cTime.minute/15))
@@ -89,4 +94,9 @@ while True:
         tm.wait(1000)
         delta = cTime - datetime.today()
     chime(n, h)
+    if h == 15:
+        setVolume(0.5)
+        tm.wait(60000)
+        ringing.play_method(stedman, sounds)
+        setVolume(1.0)
     
