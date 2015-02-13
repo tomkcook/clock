@@ -104,15 +104,26 @@ def rounds(order = 7, changes = 1):
     method = method_from_places(places, order)
     return run_method(method, changes-1, None, None, collections.deque([0]))
 
+def method_parts(method_places, bob_places, single_places, order = 7):
+    method = method_from_places(method_places, order)
+    [bob, single] = calls_from_places(method, bob_places, single_places)
+    return [method, bob, single]
+
+def method(method_places, bob_places, single_places, calls = [0], order = 7):
+    [method, bob, single] = method_parts(method_places, bob_places, single_places, order)
+    return run_method_to_rounds(method, bob, single, collections.deque(calls), 9, [0, 6])
+    
 def stedman(order = 7, calls = [0]):
-    [stedman_method, bob, single] = stedman_parts(order)
-    return run_method_to_rounds(stedman_method, bob, single, collections.deque(calls), 9, [0, 6])
+    stedman_places = np.mat([[2], [0], [2], [0], [2], [order-1], [0], [2], [0], [2], [0], [order-1]])
+    stedman_bob = [order-3]
+    stedman_single = [order-3, order-2, order-1]
+    return method(stedman_places, stedman_bob, stedman_single)
 
 def stedman_parts(order = 7):
     stedman_places = np.mat([[2], [0], [2], [0], [2], [order-1], [0], [2], [0], [2], [0], [order-1]])
-    stedman_method = method_from_places(stedman_places, order)
-    [bob, single] = calls_from_places(stedman_method, [order-3], [order-3, order-2, order-1])
-    return [stedman_method, bob, single]    
+    stedman_bob = [order-3]
+    stedman_single = [order-3, order-2, order-1]
+    return method_parts(stedman_places, stedman_bob, stedman_single)
 
 def plot_method(s, lines = [], numbers = []):
     bells = s.shape[0]

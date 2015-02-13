@@ -12,6 +12,8 @@ import pygame.time as tm
 from datetime import datetime, time, timedelta
 import math
 import ringing
+import threading
+import web_ringing
 
 # Setting the buffer size to 2048 greatly improves the striking.  Not clear why.
 mx.init(44100, -16, 2, 2048)
@@ -85,6 +87,32 @@ def nextChimeTime():
 def setVolume(vol):
     for s in sounds:
         s.set_volume(vol)
+
+web_lock = threading.Lock()
+web_method = None
+
+def ring_method(name):
+    global web_method
+    global web_lock
+    web_lock.acquire()
+    web_method = name
+    web_lock.release()
+
+web_ringing.start(ring_method)
+
+def check_ring_method():
+    global web_lock
+    global web_method
+    web_lock.acquire()
+    local_method = web_method
+    web_lock.release()
+    if local_method is not None:
+        setVolume(ringing_vol)
+        ringing.play_method(stedman, sounds)
+        setVolume(1.0)
+    web_lock.acquire()
+    web_method = None
+    web_lock.release()
     
 while True:
     cTime = nextChimeTime()
@@ -94,11 +122,6 @@ while True:
     h = cTime.hour
     while datetime.today() < cTime:
         tm.wait(1000)
-        delta = cTime - datetime.today()
-    chime(n, h)
-    if h == 16 and n == 4:
-        setVolume(ringing_vol)
-        tm.wait(60000)
-        ringing.play_method(stedman, sounds)
-        setVolume(1.0)
-    
+        check_ring_method()
+    if (datetime.today() - cTime).total_seconds() < 60:
+        chime(n, h)
