@@ -24,8 +24,20 @@ class web_ring:
     def GET(self, name):
         if not name:
             name = 'stedman'
+        if name != 'stedman':
+            g_ring_method('stedman')
+            return '''
+        <html>
+            <head>
+                <title>Ringing</title>
+            </head>
+            <body>
+                <h1>Sorry, don't know {0}; enjoy some Stedman instead.!</h1>
+            </body>
+        </html>
+            '''.format(name)
+            
         g_ring_method(name)
-        print 'Ringing method {0}'.format(name)
         return '''
         <html>
             <head>
