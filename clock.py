@@ -40,7 +40,7 @@ def round():
 
 # Decide whether chimes should sound based on hour of day.
 def quietTimes(h):
-    return h > 7 and h < 22
+    return h > 6 and h < 22
 
 # Chime four notes in the chime sequence.
 # This treats the sequence as being in 3/4 time.  The first three are crotchets,
