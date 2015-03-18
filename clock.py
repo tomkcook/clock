@@ -1,11 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This temporary script file is located here:
-/home/tkcook/.spyder2/.temp.py
-"""
 
 import pygame.mixer as mx
 import pygame.time as tm
@@ -14,6 +8,12 @@ import math
 import ringing
 import threading
 import web_ringing
+from scipy import interp
+
+volumes = (
+    [6.75, 7.75, 21.25, 22.25],
+    [0, 1, 1, 0]
+    )
 
 # Setting the buffer size to 2048 greatly improves the striking.  Not clear why.
 mx.init(44100, -16, 2, 2048)
@@ -38,9 +38,9 @@ def round():
         sounds[i].play()
         tm.wait(250)
 
-# Decide whether chimes should sound based on hour of day.
-def quietTimes(h):
-    return h > 6 and h < 22
+# Decide chime volume based on hour of day.
+def volume(h):
+    return interp(h, *volumes)
 
 # Chime four notes in the chime sequence.
 # This treats the sequence as being in 3/4 time.  The first three are crotchets,
@@ -68,14 +68,15 @@ def hour(n):
 
 # Chime the quarters and hour as appropriate
 def chime(n, h):
-    if quietTimes(h):
-        quarter(n)
-        tm.wait(1500)
-        if n == 4:
-            if h > 12:
-                hour(h-12)
-            else:
-                hour(h)
+    ftime = float(h) + float(n%4) / 4.0
+    setVolume(volume(ftime))
+    quarter(n)
+    tm.wait(1500)
+    if n == 4:
+        if h > 12:
+            hour(h-12)
+        else:
+            hour(h)
 
 # This finds the next quarter-hour
 def nextChimeTime():
@@ -109,7 +110,6 @@ def check_ring_method():
     if local_method is not None:
         setVolume(ringing_vol)
         ringing.play_method(stedman, sounds)
-        setVolume(1.0)
     web_lock.acquire()
     web_method = None
     web_lock.release()
