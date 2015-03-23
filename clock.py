@@ -11,7 +11,7 @@ import web_ringing
 from scipy import interp
 
 volumes = (
-    [6.75, 7.75, 21.25, 22.25],
+    [6.9, 8, 21, 22.1],
     [0, 1, 1, 0]
     )
 
